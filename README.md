@@ -54,6 +54,19 @@ Deployment takes about a minute; then check https://liftyx.app/. The
 - [ ] Replace the "Coming soon to the App Store" note on `index.html` with an
   App Store link or badge once the app is live.
 
+## SEO
+
+- `index.html` carries the canonical URL, Open Graph/Twitter tags, and
+  `MobileApplication` JSON-LD; `support.html` and `privacy.html` carry canonical
+  and Open Graph tags.
+- `robots.txt` and `sitemap.xml` ship with the site; the sitemap lists the three
+  pages.
+- Verify `liftyx.app` in Google Search Console (DNS TXT or HTML file) and submit
+  `https://liftyx.app/sitemap.xml`; repeat in Bing Webmaster Tools.
+- After launch, add the App Store link and the `apple-itunes-app` meta tag with
+  the numeric app ID.
+- Keep `/README.md` out of search results via the robots disallow.
+
 ## App Store Connect field mapping
 
 | ASC field | Value |

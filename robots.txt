@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# The site README is not a page for visitors; keep it out of search results.
+Disallow: /README.md
+Disallow: /README.html
+
+Sitemap: https://liftyx.app/sitemap.xml

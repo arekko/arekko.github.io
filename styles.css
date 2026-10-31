@@ -111,6 +111,19 @@ li {
   margin: 18px 0;
 }
 
+.card h2:first-child {
+  margin-top: 0;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 1.3rem;
+}
+
+.steps li {
+  margin: 8px 0;
+}
+
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
