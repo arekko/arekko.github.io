@@ -1,7 +1,8 @@
 # Liftyx website (landing + privacy policy + support)
 
 Static pages used for the App Store **Privacy Policy URL** and **Support URL**.
-No build step, no JavaScript, no external assets, no cookies.
+No build step, no cookies. The landing and support pages load one external
+script: the TelemetryDeck web analytics beacon (cookieless, anonymous).
 
 The source of truth lives here, in `docs/`, in the **private** app repository.
 The site is published from a separate **public** repository,
@@ -30,6 +31,26 @@ The site is published from a separate **public** repository,
 `https://arekko.github.io/...` redirects to the custom domain, so links in
 already-shipped builds keep working.
 
+## Web analytics
+
+`index.html` and `support.html` load TelemetryDeck's Web SDK from
+`cdn.telemetrydeck.com` with `data-page-engagement="false"`, so each visit sends
+a single `pageview` signal (path, referrer, UTM parameters, country, browser and
+device). `privacy.html` is deliberately excluded: the policy page runs nothing.
+
+- The site reports to its own TelemetryDeck app, **"Liftyx Website"**, in the
+  same account as the iOS app. Do NOT reuse the iOS app ID — website traffic
+  would pollute the app's DAU/retention.
+- The site app ID lives in each page's `data-app-id` attribute. It is a public
+  client identifier — it only permits sending signals, not a secret — but keep
+  it out of this README, which ships to the public site repository.
+- Web events are counted against the account's monthly quota, shared with the
+  app. Page engagement is off to halve the burn; enable it per page only if
+  there is headroom.
+- Localhost visits are tagged as test signals automatically; watch them in
+  TelemetryDeck **Test Mode** → *Recent Signals*.
+- The beacon and `privacy.html` §11 must ship in the same deploy.
+
 ## Deploying
 
 GitHub publishes the site repository automatically from `main`.
@@ -53,6 +74,7 @@ Deployment takes about a minute; then check https://liftyx.app/. The
 - [x] Custom domain and support email configured.
 - [ ] Replace the "Coming soon to the App Store" note on `index.html` with an
   App Store link or badge once the app is live.
+- [x] TelemetryDeck website App ID set in `index.html` and `support.html`.
 
 ## SEO
 
