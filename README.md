@@ -17,7 +17,7 @@ The site is published from a separate **public** repository,
 | `privacy.html` | Privacy policy — required by App Store Connect |
 | `support.html` | Support page — required by App Store Connect |
 | `styles.css` | Shared styling (light/dark) |
-| `assets/icon-*.png` | App icon used on the pages |
+| `favicon.ico`, `assets/icon-*.png` | App icon and favicon used by browsers and search results |
 | `CNAME` | Keeps the custom domain configured; never omit it from a deploy |
 
 ## URLs
@@ -83,6 +83,11 @@ Deployment takes about a minute; then check https://liftyx.app/. The
   and Open Graph tags.
 - `robots.txt` and `sitemap.xml` ship with the site; the sitemap lists the three
   pages.
+- Favicons: `/favicon.ico` (16/32/48) plus 48/96/192/512 px PNGs, declared on
+  every page. Google caches favicons separately from page content, so after a
+  change use Search Console's URL Inspection → Request indexing and allow days
+  to weeks. Brave usually refreshes sooner; resubmit via
+  `https://search.brave.com/submit-url` if it doesn't.
 - Verify `liftyx.app` in Google Search Console (DNS TXT or HTML file) and submit
   `https://liftyx.app/sitemap.xml`; repeat in Bing Webmaster Tools.
 - After launch, add the App Store link and the `apple-itunes-app` meta tag with
