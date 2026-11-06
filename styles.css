@@ -185,6 +185,25 @@ li {
   text-decoration: none;
 }
 
+/* App Store badge */
+
+.app-store {
+  margin: 26px 0 0;
+  display: flex;
+  justify-content: center;
+}
+
+.app-store a {
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.app-store img {
+  display: block;
+  width: 180px;
+  height: auto;
+}
+
 .notice {
   text-align: center;
   color: var(--muted);

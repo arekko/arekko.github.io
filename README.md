@@ -18,6 +18,7 @@ The site is published from a separate **public** repository,
 | `support.html` | Support page — required by App Store Connect |
 | `styles.css` | Shared styling (light/dark) |
 | `favicon.ico`, `assets/icon-*.png` | App icon and favicon used by browsers and search results |
+| `assets/app-store-badge-{black,white}.svg` | Official Apple "Download on the App Store" badge (light/dark) |
 | `CNAME` | Keeps the custom domain configured; never omit it from a deploy |
 
 ## URLs
@@ -72,8 +73,8 @@ Deployment takes about a minute; then check https://liftyx.app/. The
 ## Before submission
 
 - [x] Custom domain and support email configured.
-- [ ] Replace the "Coming soon to the App Store" note on `index.html` with an
-  App Store link or badge once the app is live.
+- [x] App Store link and badge on `index.html`; the `apple-itunes-app` Smart App
+  Banner meta tag carries app ID `6827282064`.
 - [x] TelemetryDeck website App ID set in `index.html` and `support.html`.
 
 ## SEO
@@ -90,8 +91,8 @@ Deployment takes about a minute; then check https://liftyx.app/. The
   `https://search.brave.com/submit-url` if it doesn't.
 - Verify `liftyx.app` in Google Search Console (DNS TXT or HTML file) and submit
   `https://liftyx.app/sitemap.xml`; repeat in Bing Webmaster Tools.
-- After launch, add the App Store link and the `apple-itunes-app` meta tag with
-  the numeric app ID.
+- The App Store link is `https://apps.apple.com/app/liftyx/id6827282064`; keep
+  it in sync with the `apple-itunes-app` meta tag and `installUrl` JSON-LD.
 - Keep `/README.md` out of search results via the robots disallow.
 
 ## App Store Connect field mapping
