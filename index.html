@@ -71,7 +71,8 @@
     </section>
 
     <p class="app-store">
-      <a href="https://apps.apple.com/app/liftyx/id6827282064"
+      <a id="app-store-link"
+         href="https://apps.apple.com/app/liftyx/id6827282064"
          aria-label="Download Liftyx on the App Store">
         <picture>
           <source media="(prefers-color-scheme: dark)" srcset="assets/app-store-badge-white.svg">
@@ -145,5 +146,46 @@
       <a href="mailto:support@liftyx.app">support@liftyx.app</a>
     </span>
   </footer>
+
+  <script>
+    // One anonymous click signal when the App Store badge is used. The v3 web
+    // endpoint derives the same cookieless visitor hash as the pageview.
+    (function () {
+      var link = document.getElementById("app-store-link");
+      if (!link) return;
+
+      link.addEventListener("click", function () {
+        var config = document.querySelector("script[data-app-id]");
+        var appID = config && config.getAttribute("data-app-id");
+        if (!appID) return;
+
+        var isLocal =
+          /^localhost$|^127(\.\d+){0,2}\.\d+$|^\[::1?\]$/.test(window.location.hostname) ||
+          window.location.protocol === "file:";
+
+        var payload = {
+          appID: appID,
+          url: window.location.href,
+          referrer: document.referrer,
+          locale: navigator.language,
+          type: "Actions.AppStoreLink.clicked",
+          isTestMode: isLocal ? "true" : "false",
+        };
+        var body = JSON.stringify(payload);
+        var endpoint = "https://nom.telemetrydeck.com/v3/w/";
+
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(endpoint, new Blob([body], { type: "text/plain" }));
+        } else {
+          fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: body,
+            keepalive: true,
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

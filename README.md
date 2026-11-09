@@ -37,14 +37,18 @@ already-shipped builds keep working.
 `index.html` and `support.html` load TelemetryDeck's Web SDK from
 `cdn.telemetrydeck.com` with `data-page-engagement="false"`, so each visit sends
 a single `pageview` signal (path, referrer, UTM parameters, country, browser and
-device). `privacy.html` is deliberately excluded: the policy page runs nothing.
+device). Clicking the App Store badge on `index.html` sends one
+`Actions.AppStoreLink.clicked` signal to TelemetryDeck's v3 web endpoint, using
+the same cookieless visitor hash. `privacy.html` is deliberately excluded: the
+policy page runs nothing.
 
 - The site reports to its own TelemetryDeck app, **"Liftyx Website"**, in the
   same account as the iOS app. Do NOT reuse the iOS app ID — website traffic
   would pollute the app's DAU/retention.
 - The site app ID lives in each page's `data-app-id` attribute. It is a public
   client identifier — it only permits sending signals, not a secret — but keep
-  it out of this README, which ships to the public site repository.
+  it out of this README, which ships to the public site repository. The inline
+  click script reads it from the existing script tag; do not duplicate it.
 - Web events are counted against the account's monthly quota, shared with the
   app. Page engagement is off to halve the burn; enable it per page only if
   there is headroom.
