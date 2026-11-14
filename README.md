@@ -1,73 +1,67 @@
-# Liftyx website
+# Liftyx website (landing + privacy policy + support)
 
-Static marketing, privacy policy and support pages for
-[Liftyx](https://liftyx.app/), a private workout tracker for iPhone. The site
-supplies the App Store Connect **Privacy Policy URL** and **Support URL**.
+Static pages used for the App Store **Privacy Policy URL** and **Support URL**.
+No build step, no cookies. The landing and support pages load one external
+script: the TelemetryDeck web analytics beacon (cookieless, anonymous).
 
-- **Live site:** https://liftyx.app/
-- **Stack:** plain HTML and CSS, no build step, no cookies
-- **Hosting:** GitHub Pages user site, published from `main`
+The source of truth lives here, in `docs/`, in the **private** app repository.
+The site is published from a separate **public** repository,
+[`arekko/arekko.github.io`](https://github.com/arekko/arekko.github.io)
+(a GitHub *user site*, served at the account root).
 
-> [!IMPORTANT]
-> This repository is a **published mirror**. The source of truth is `docs/` in
-> the private app repository. Make changes there and deploy them (see
-> [Deploying](#deploying)). Anything committed only here is overwritten by the
-> next deploy's `rsync --delete`.
+## Files
 
-## Contents
+| File | Purpose |
+|---|---|
+| `index.html` | Landing page (marketing URL, optional) |
+| `privacy.html` | Privacy policy — required by App Store Connect |
+| `support.html` | Support page — required by App Store Connect |
+| `styles.css` | Shared styling (light/dark) |
+| `favicon.ico`, `assets/icon-*.png` | App icon and favicon used by browsers and search results |
+| `assets/app-store-badge-{black,white}.svg` | Official Apple "Download on the App Store" badge (light/dark) |
+| `CNAME` | Keeps the custom domain configured; never omit it from a deploy |
 
-- [Pages](#pages)
-- [Repository layout](#repository-layout)
-- [Local preview](#local-preview)
-- [Deploying](#deploying)
-- [App Store links](#app-store-links)
-- [Web analytics](#web-analytics)
-- [SEO](#seo)
-- [App Store Connect field mapping](#app-store-connect-field-mapping)
+## URLs
 
-## Pages
-
-| Page | URL | Notes |
-|---|---|---|
-| Landing | https://liftyx.app/ | Marketing URL; App Store badge and Smart App Banner |
-| Privacy policy | https://liftyx.app/privacy.html | Required by App Store Connect; runs no scripts |
-| Support | https://liftyx.app/support.html | Required by App Store Connect |
+| Page | URL |
+|---|---|
+| Landing | https://liftyx.app/ |
+| Privacy policy | https://liftyx.app/privacy.html |
+| Support | https://liftyx.app/support.html |
 
 `https://arekko.github.io/...` redirects to the custom domain, so links in
-builds that have already shipped keep working.
+already-shipped builds keep working.
 
-## Repository layout
+## Web analytics
 
-| Path | Purpose |
-|---|---|
-| `index.html` | Landing page |
-| `privacy.html` | Privacy policy |
-| `support.html` | Support page |
-| `styles.css` | Shared styles (light and dark) |
-| `favicon.ico`, `assets/icon-*.png` | App icon and favicons for browsers and search results |
-| `assets/og-image-iphone.png` | Open Graph and Twitter share image |
-| `assets/app-store-badge-{black,white}.svg` | Official Apple "Download on the App Store" badge (light and dark) |
-| `robots.txt`, `sitemap.xml` | Crawler rules and the sitemap of the three pages |
-| `CNAME` | Custom domain (`liftyx.app`). **Never omit it from a deploy.** |
-| `README.md` | This file, kept out of search results by `robots.txt` |
+`index.html` and `support.html` load TelemetryDeck's Web SDK from
+`cdn.telemetrydeck.com` with `data-page-engagement="false"`, so each visit sends
+a single `pageview` signal (path, referrer, UTM parameters, country, browser and
+device). Clicking the App Store badge on `index.html` sends one
+`Actions.AppStoreLink.clicked` signal to TelemetryDeck's v3 web endpoint, using
+the same cookieless visitor hash. `privacy.html` is deliberately excluded: the
+policy page runs nothing.
 
-## Local preview
-
-The pages are static, so any local web server works:
-
-```sh
-python3 -m http.server 8000
-```
-
-Then open http://localhost:8000/. TelemetryDeck tags localhost visits as test
-signals, so they don't count as real traffic (see [Web analytics](#web-analytics)).
+- The site reports to its own TelemetryDeck app, **"Liftyx Website"**, in the
+  same account as the iOS app. Do NOT reuse the iOS app ID — website traffic
+  would pollute the app's DAU/retention.
+- The site app ID lives in each page's `data-app-id` attribute. It is a public
+  client identifier — it only permits sending signals, not a secret — but keep
+  it out of this README, which ships to the public site repository. The inline
+  click script reads it from the existing script tag; do not duplicate it.
+- Web events are counted against the account's monthly quota, shared with the
+  app. Page engagement is off to halve the burn; enable it per page only if
+  there is headroom.
+- Localhost visits are tagged as test signals automatically; watch them in
+  TelemetryDeck **Test Mode** → *Recent Signals*.
+- The beacon and `privacy.html` §11 must ship in the same deploy.
 
 ## Deploying
 
-GitHub Pages publishes `main` automatically, usually within a minute.
+GitHub publishes the site repository automatically from `main`.
 
-`git subtree push` doesn't work because this repository has commits of its own
-(notably `CNAME`). From the private app repository, mirror `docs/` instead:
+`git subtree push` is no longer usable because the site repository has commits
+of its own (notably `CNAME`). Mirror the files instead:
 
 ```sh
 rsync -a --delete --exclude .git docs/ ../arekko.github.io/
@@ -77,74 +71,37 @@ git commit -m "docs: update site"
 git push
 ```
 
-`--delete` is safe because this repository holds nothing except a copy of
-`docs/`. After the push, check https://liftyx.app/.
+Deployment takes about a minute; then check https://liftyx.app/. The
+`--delete` is safe because the site repo holds nothing except a copy of `docs/`.
 
-Before you deploy:
+## Before submission
 
-- [ ] `CNAME` is present.
-- [ ] Analytics changes and the matching update to `privacy.html` §11 ("This
-  website") ship in the same deploy.
-- [ ] The App Store links still agree (see [App Store links](#app-store-links)).
-
-## App Store links
-
-App ID: `6827282064`.
-
-| Where | Link | Why |
-|---|---|---|
-| `index.html` badge | `https://apps.apple.com/app/apple-store/id6827282064?pt=129602377&ct=site-home&mt=8` | `site-home` campaign link, so App Store Connect attributes downloads to the site |
-| `installUrl` (JSON-LD) | `https://apps.apple.com/app/liftyx/id6827282064` | Canonical link. Keep campaign parameters out of it, or search traffic is counted as site traffic. |
-| `apple-itunes-app` meta tag | `app-id=6827282064` | Smart App Banner in Safari |
-
-In HTML attributes, write `&` in the campaign link as `&amp;`.
-
-## Web analytics
-
-`index.html` and `support.html` load TelemetryDeck's Web SDK from
-`cdn.telemetrydeck.com`. The SDK is cookieless and anonymous.
-
-- **Page views:** `data-page-engagement="false"` means each visit sends one
-  `pageview` signal (path, referrer, UTM parameters, country, browser and
-  device).
-- **Badge clicks:** clicking the App Store badge on `index.html` sends one
-  `Actions.AppStoreLink.clicked` signal to TelemetryDeck's v3 web endpoint, with
-  the same cookieless visitor hash.
-- **Privacy page:** `privacy.html` is deliberately excluded and runs no scripts.
-
-Rules:
-
-- The site reports to its own TelemetryDeck app, **"Liftyx Website"**, in the
-  same account as the iOS app. **Do not reuse the iOS app ID**, because website
-  traffic would distort the app's DAU and retention numbers.
-- The site app ID lives in each page's `data-app-id` attribute. It's a public
-  client identifier that only allows sending signals, so it isn't a secret, but
-  keep it out of this README. The inline click script reads it from the existing
-  script tag, so don't duplicate it.
-- Web events count against the account's monthly quota, which the app shares.
-  Page engagement is off to halve usage; turn it on per page only if the quota
-  allows.
-- Watch localhost test signals in TelemetryDeck **Test Mode** → *Recent
-  Signals*.
+- [x] Custom domain and support email configured.
+- [x] App Store link and badge on `index.html`; the `apple-itunes-app` Smart App
+  Banner meta tag carries app ID `6827282064`.
+- [x] TelemetryDeck website App ID set in `index.html` and `support.html`.
 
 ## SEO
 
-- `index.html` carries the canonical URL, Open Graph and Twitter tags, and
-  `MobileApplication` JSON-LD. `support.html` and `privacy.html` carry canonical
-  URLs and Open Graph tags.
-- `robots.txt` allows everything except `/README.md` and `/README.html`, and
-  points to `sitemap.xml`.
-- Favicons are `/favicon.ico` (16, 32 and 48 px) plus 48, 96, 192 and 512 px
-  PNGs, declared on every page. Google caches favicons separately from page
-  content. After you change one, use Search Console's URL Inspection → *Request
-  indexing* and allow days to weeks. Brave usually refreshes sooner; if it
-  doesn't, resubmit at https://search.brave.com/submit-url.
-- Verify `liftyx.app` in Google Search Console (DNS TXT record or HTML file) and
-  submit `https://liftyx.app/sitemap.xml`. Repeat both in Bing Webmaster Tools.
+- `index.html` carries the canonical URL, Open Graph/Twitter tags, and
+  `MobileApplication` JSON-LD; `support.html` and `privacy.html` carry canonical
+  and Open Graph tags.
+- `robots.txt` and `sitemap.xml` ship with the site; the sitemap lists the three
+  pages.
+- Favicons: `/favicon.ico` (16/32/48) plus 48/96/192/512 px PNGs, declared on
+  every page. Google caches favicons separately from page content, so after a
+  change use Search Console's URL Inspection → Request indexing and allow days
+  to weeks. Brave usually refreshes sooner; resubmit via
+  `https://search.brave.com/submit-url` if it doesn't.
+- Verify `liftyx.app` in Google Search Console (DNS TXT or HTML file) and submit
+  `https://liftyx.app/sitemap.xml`; repeat in Bing Webmaster Tools.
+- The App Store link is `https://apps.apple.com/app/liftyx/id6827282064`; keep
+  it in sync with the `apple-itunes-app` meta tag and `installUrl` JSON-LD.
+- Keep `/README.md` out of search results via the robots disallow.
 
 ## App Store Connect field mapping
 
-| App Store Connect field | Value |
+| ASC field | Value |
 |---|---|
 | Privacy Policy URL | `https://liftyx.app/privacy.html` |
 | Support URL | `https://liftyx.app/support.html` |
