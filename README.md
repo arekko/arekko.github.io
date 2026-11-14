@@ -97,6 +97,10 @@ Deployment takes about a minute; then check https://liftyx.app/. The
   `https://liftyx.app/sitemap.xml`; repeat in Bing Webmaster Tools.
 - The App Store link is `https://apps.apple.com/app/liftyx/id6827282064`; keep
   it in sync with the `apple-itunes-app` meta tag and `installUrl` JSON-LD.
+  The home page badge uses the `site-home` campaign link
+  `https://apps.apple.com/app/apple-store/id6827282064?pt=129602377&ct=site-home&mt=8`
+  so App Store Connect attributes downloads to the site; keep `installUrl`
+  canonical (no campaign parameters).
 - Keep `/README.md` out of search results via the robots disallow.
 
 ## App Store Connect field mapping
