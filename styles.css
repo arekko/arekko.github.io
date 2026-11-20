@@ -10,8 +10,7 @@
   --border: #e3e8ef;
   --radius: 14px;
   --accent-soft: rgba(37, 99, 235, 0.1);
-  --hero-glow: rgba(37, 99, 235, 0.16);
-  --phone: #0f1420;
+  --grid-line: rgba(28, 36, 48, 0.05);
   --done: #16a34a;
 }
 
@@ -25,8 +24,7 @@
     --accent-strong: #8db2ff;
     --border: #263041;
     --accent-soft: rgba(109, 155, 255, 0.14);
-    --hero-glow: rgba(109, 155, 255, 0.18);
-    --phone: #05070c;
+    --grid-line: rgba(255, 255, 255, 0.04);
     --done: #4ade80;
   }
 }
@@ -46,6 +44,15 @@ body {
   line-height: 1.6;
   background: var(--bg);
   color: var(--text);
+}
+
+/* A faint 32px grid behind the landing page; cards keep their solid surface. */
+body.landing {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center top;
 }
 
 main {
@@ -99,7 +106,6 @@ li {
   width: 96px;
   height: 96px;
   border-radius: 22px;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
 }
 
 .hero p.tagline {
@@ -323,18 +329,6 @@ li {
   text-align: center;
   padding: 48px 0 24px;
   position: relative;
-}
-
-.landing .hero::before {
-  content: "";
-  position: absolute;
-  inset: -80px auto auto 50%;
-  margin-left: -260px;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, var(--hero-glow), transparent 65%);
-  z-index: -1;
-  pointer-events: none;
 }
 
 .landing .hero h1 {
@@ -648,7 +642,6 @@ li {
 
 .cta img {
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
 }
 
 .cta h2 {
