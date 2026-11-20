@@ -9,10 +9,9 @@ supplies the App Store Connect **Privacy Policy URL** and **Support URL**.
 - **Hosting:** GitHub Pages user site, published from `main`
 
 > [!IMPORTANT]
-> This repository is a **published mirror**. The source of truth is `docs/` in
-> the private app repository. Make changes there and deploy them (see
-> [Deploying](#deploying)). Anything committed only here is overwritten by the
-> next deploy's `rsync --delete`.
+> This repository is the **source of truth** for the site. Edit the pages here
+> and push (see [Deploying](#deploying)). The copy that used to live in `docs/`
+> in the private app repository was removed on 2026-11-20.
 
 ## Contents
 
@@ -66,19 +65,17 @@ signals, so they don't count as real traffic (see [Web analytics](#web-analytics
 
 GitHub Pages publishes `main` automatically, usually within a minute.
 
-`git subtree push` doesn't work because this repository has commits of its own
-(notably `CNAME`). From the private app repository, mirror `docs/` instead:
+Edit the pages here, then commit and push:
 
 ```sh
-rsync -a --delete --exclude .git docs/ ../arekko.github.io/
-cd ../arekko.github.io
 git add -A
 git commit -m "docs: update site"
 git push
 ```
 
-`--delete` is safe because this repository holds nothing except a copy of
-`docs/`. After the push, check https://liftyx.app/.
+After the push, check https://liftyx.app/. When `styles.css` changes, bump the
+`?v=` value on its `<link>` in all three pages: GitHub Pages lets browsers cache
+files for 10 minutes, and a new page with old CSS looks broken.
 
 Before you deploy:
 
