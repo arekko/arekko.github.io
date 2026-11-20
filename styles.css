@@ -212,6 +212,12 @@ li {
   height: auto;
 }
 
+/* Match the badge's own corner; the section image rules (.hero img,
+   .cta img) would otherwise clip it with a larger radius. */
+.app-store a img {
+  border-radius: 13px;
+}
+
 .notice {
   text-align: center;
   color: var(--muted);
