@@ -406,12 +406,6 @@ li {
 
 .landing .features li {
   padding: 20px;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-
-.landing .features li:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
 }
 
 .landing .features strong {
@@ -671,16 +665,6 @@ li {
 
   .landing .hero h1 {
     font-size: 1.9rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .landing .features li {
-    transition: none;
-  }
-
-  .landing .features li:hover {
-    transform: none;
   }
 }
 
