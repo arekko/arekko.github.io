@@ -66,8 +66,17 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+a,
+button,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover styles only on devices with a real pointer; on touch they stick after a tap. */
+@media (hover: hover) {
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 h1 {
@@ -190,13 +199,15 @@ li {
   color: #fff;
 }
 
-.button.primary:hover {
-  text-decoration: none;
-  filter: brightness(1.05);
-}
+@media (hover: hover) {
+  .button.primary:hover {
+    text-decoration: none;
+    filter: brightness(1.05);
+  }
 
-.button:hover {
-  text-decoration: none;
+  .button:hover {
+    text-decoration: none;
+  }
 }
 
 /* App Store badge */
@@ -294,8 +305,10 @@ li {
   color: var(--text);
 }
 
-.brand:hover {
-  text-decoration: none;
+@media (hover: hover) {
+  .brand:hover {
+    text-decoration: none;
+  }
 }
 
 .brand img {
